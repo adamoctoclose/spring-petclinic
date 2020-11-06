@@ -1,45 +1,32 @@
 pipeline {
-    agent {
-        label 'docker'
-    }
-    //  parameters here provide the shared values used with each of the Octopus pipeline steps.
-    parameters {
-        // The space ID that we will be working with. The default space is typically Spaces-1.
-        string(defaultValue: 'Spaces-1', description: '', name: 'SpaceId', trim: true)
-        // The Octopus project we will be deploying.
-        string(defaultValue: 'Petclinic', description: '', name: 'ProjectName', trim: true)
-        // The environment we will be deploying to.
-        string(defaultValue: 'Dev', description: '', name: 'EnvironmentName', trim: true)
-        // The name of the Octopus instance in Jenkins that we will be working with. This is set in:
-        // Manage Jenkins -> Configure System -> Octopus Deploy Plugin
-        string(defaultValue: 'Octopus', description: '', name: 'ServerId', trim: true)
+    agent any
+    tools {
+        maven 'Maven 3.5.2'
+        jdk 'Java 9'
     }
     stages {
-        stage ('Add tools') {
+        stage ('Initialize') {
             steps {
-                tool('OctoCLI')
+                sh '''
+                    echo "PATH = ${PATH}"
+                    echo "M2_HOME = ${M2_HOME}"
+                '''
             }
         }
-        stage('Building our image') {
+
+        stage ('Build') {
             steps {
-                script {
-                    dockerImage = docker.build "mcasperson/petclinic:$BUILD_NUMBER"
+                sh 'mvn package'
+            }
+        }
+
+        stage ('Deploy to Octopus') {
+            steps {
+                withCredentials([string(credentialsId: 'OctopusAPIKey', variable: 'APIKey')]) {
+                    sh """
+                        ${tool('Octo CLI')}/Octo push --package target/demo.0.0.1-SNAPSHOT.war --replace-existing --server https://youroctopusserver --apiKey ${APIKey}                        
+                    """
                 }
-            }
-        }
-        stage('Deploy our image') {
-            steps {
-                script {
-                    // Assume the Docker Hub registry by passing an empty string as the first parameter
-                    docker.withRegistry('' , 'dockerhub') {
-                        dockerImage.push()
-                    }
-                }
-            }
-        }
-        stage('deploy') {
-            steps {                                
-                octopusCreateRelease deployThisRelease: true, environment: "${EnvironmentName}", project: "${ProjectName}", releaseVersion: "1.0.${BUILD_NUMBER}", serverId: "${ServerId}", spaceId: "${SpaceId}", toolId: 'Default', waitForDeployment: true                
             }
         }
     }
