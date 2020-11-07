@@ -24,7 +24,7 @@ pipeline {
             steps {
                     sh """
                         echo ""
-                        ${tool('Octo CLI')}octo pack --id flyway --format zip --version= 2.3.1 --outFolder target --basePath flyway                   
+                        ${tool('Octo CLI')}octo pack --id flyway --format zip --version 2.3.1 --outFolder target --basePath flyway                   
                     """
                 }
             }
