@@ -151,7 +151,6 @@
             </goals>
           </execution>
         </executions>
-        <exclude>flyway</exclude>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
