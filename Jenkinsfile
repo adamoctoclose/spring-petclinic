@@ -25,7 +25,7 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'OctopusAPIKey', variable: 'APIKey')]) {
                     sh """
-                        ${tool('Octo CLI')}/Octo push --package target/demo.0.0.1-SNAPSHOT.war --replace-existing --server https://samples.octopus.app --apiKey ${APIKey}                        
+                        ${tool('Octo CLI')}/Octo push --package target/demo.0.0.1-SNAPSHOT.war --replace-existing --server https://samples.octopus.app --apiKey ${APIKey} --space Spaces-203                       
                     """
                 }
             }
