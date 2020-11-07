@@ -19,6 +19,12 @@ pipeline {
                 sh 'mvn clean package dependency:purge-local-repository'
             }
         }
+        
+    post {
+        always {
+            archiveArtifacts artifacts: 'build/libs/**/*.war', fingerprint: true
+            junit 'build/reports/**/*.xml'
+        }
 
         stage ('Deploy to Octopus') {
             steps {
