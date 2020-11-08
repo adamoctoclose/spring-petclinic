@@ -3,7 +3,7 @@ pipeline {
     tools {
         maven 'maven'
         jdk 'jdk'
-        octo 'octo'
+        octo 'Octopus Deploy CLI'
     }
     stages {
         stage ('Initialize') {
