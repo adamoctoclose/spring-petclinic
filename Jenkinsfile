@@ -3,6 +3,7 @@ pipeline {
     tools {
         maven 'maven'
         jdk 'jdk'
+        octo 'octo'
     }
     stages {
         stage ('Initialize') {
@@ -34,7 +35,7 @@ pipeline {
                 withCredentials([string(credentialsId: 'OctopusAPIKey', variable: 'APIKey')]) {
                     sh """
                         ${tool('Octo CLI')}octo push --package target/petclinic.2.3.1.war --replace-existing --server https://samples.octopus.app --apiKey ${APIKey} --space Spaces-203
-                        ${tool('Octo CLI')}octo push --package target/flyway.2.3.1.zip --replace-existing --server https://samples.octopus.app --apiKey ${APIKey} --space Spaces-203                       
+                        sh 'octo push --package target/flyway.2.3.1.zip --replace-existing --server https://samples.octopus.app --apiKey ${APIKey} --space Spaces-203'                       
                     """
                 }
             }
