@@ -13,7 +13,7 @@
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>2.3.1.RELEASE</version>
   </parent>
-  <name>petclinic.web</name>
+  <name>petclinic</name>
 
   <properties>
 
