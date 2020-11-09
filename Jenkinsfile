@@ -1,14 +1,11 @@
 pipeline {
     agent any
     
-    stages {
-        stage ('Add tools') {
-            steps {
-                tool('OctoCLI')
-                tool('maven')
-            }
-        }
+    tools {
+        maven 'maven'
+        jdk 'jdk'
     }
+    
     stages {
         stage ('Initialize') {
             steps {
@@ -16,8 +13,7 @@ pipeline {
                     echo "PATH = ${PATH}"
                     echo "M2_HOME = ${M2_HOME}"
                 '''
-            }
-        }
+            }      
 
         stage ('Build') {
             steps {
