@@ -16,6 +16,7 @@ pipeline {
     */
     tools {
         maven 'maven 3'
+        jdk 'jdk'
     }
     agent any
     stages {
@@ -37,7 +38,7 @@ pipeline {
                 // Update the Maven project version to match the current build
                 sh(script: "mvn versions:set -DnewVersion=1.0.${BUILD_NUMBER}", returnStdout: true)
                 // Package the code
-                sh(script: "mvn package", returnStdout: true)
+                sh(script: "mvn clean package dependency:purge-local-repository")
             }
         }
         stage('pack'){
