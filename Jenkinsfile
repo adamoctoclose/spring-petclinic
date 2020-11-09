@@ -16,7 +16,7 @@ pipeline {
 
         stage ('Build') {
             steps {
-                sh 'mvn versions:set -DnewVersion=3.0.0'
+                sh 'mvn versions:set -DnewVersion=3.0.${BUILD_NUMBER}'
                 sh 'mvn clean package dependency:purge-local-repository'
             }
         }
@@ -34,8 +34,8 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'OctopusAPIKey', variable: 'APIKey')]) {
                     sh """
-                        ${tool('Octo CLI')}octo push --package target/petclinic.web.3.0.0.war --replace-existing --server https://samples.octopus.app --apiKey ${APIKey} --space Spaces-203
-                        ${tool('Octo CLI')}octo push --package target/petclinic.flyway.3.0.0.zip --replace-existing --server https://samples.octopus.app --apiKey ${APIKey} --space Spaces-203                       
+                        ${tool('Octo CLI')}octo push --package target/petclinic.web.3.0.${BUILD_NUMBER}.war --replace-existing --server https://samples.octopus.app --apiKey ${APIKey} --space Spaces-203
+                        ${tool('Octo CLI')}octo push --package target/petclinic.flyway.3.0.${BUILD_NUMBER}.zip --replace-existing --server https://samples.octopus.app --apiKey ${APIKey} --space Spaces-203                       
                     """
                 }
             }
