@@ -16,6 +16,7 @@ pipeline {
 
         stage ('Build') {
             steps {
+                sh 'mvn versions:set -DnewVersion=3.0.0'
                 sh 'mvn clean package dependency:purge-local-repository'
             }
         }
