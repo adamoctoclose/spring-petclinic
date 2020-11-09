@@ -19,6 +19,8 @@ pipeline {
         jdk 'jdk'
     }
     agent any
+    
+    
     stages {
         /*
             The OctoCLI tool has been defined with the Custom Tools plugin: https://plugins.jenkins.io/custom-tools-plugin/
@@ -28,6 +30,16 @@ pipeline {
             This directory is then specified as the default location of the Octo CLI in Jenkins under
             Manage Jenkins -> Global Tools Configuration -> Octopus Deploy CLI.
         */
+        
+        stage ('Initialize') {
+            steps {
+                sh '''
+                    echo "PATH = ${PATH}"
+                    echo "M2_HOME = ${M2_HOME}"
+                '''
+            }
+        }
+        
         stage ('Add tools') {
             steps {
                 sh "echo \"OctoCLI: ${tool('OctoCLI')}\""

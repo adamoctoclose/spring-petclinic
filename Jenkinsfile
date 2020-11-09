@@ -1,7 +1,7 @@
 pipeline {
     agent any
     tools {
-        maven 'maven'
+        maven 'maven 3'
         jdk 'jdk'
     }
     stages {
@@ -34,7 +34,7 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'OctopusAPIKey', variable: 'APIKey')]) {
                     sh """
-                        ${tool('Octo CLI')}octo push --package target/petclinic.web.3.0.${BUILD_NUMBER}.war --replace-existing --server https://samples.octopus.app --apiKey ${APIKey} --space Spaces-203
+                        ${tool('Octo CLI')}octo push --package target/petclinic.3.0.${BUILD_NUMBER}.war --replace-existing --server https://samples.octopus.app --apiKey ${APIKey} --space Spaces-203
                         ${tool('Octo CLI')}octo push --package target/petclinic.flyway.3.0.${BUILD_NUMBER}.zip --replace-existing --server https://samples.octopus.app --apiKey ${APIKey} --space Spaces-203                       
                     """
                 }
