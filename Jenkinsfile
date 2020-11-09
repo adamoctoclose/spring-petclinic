@@ -3,7 +3,6 @@ pipeline {
     tools {
         maven 'maven'
         jdk 'jdk'
-        tool('OctoCLI')
     }
     stages {
         stage ('Initialize') {
